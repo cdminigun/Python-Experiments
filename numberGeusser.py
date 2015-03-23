@@ -1,10 +1,6 @@
 import random
 
 
-def main():
-    numberGuesser()
-
-
 def numberGuesser():
     """a function to generate a random number and has the user guess"""
     promptUser = "Guess a hole number(Non negative)from 1 to 100:"
@@ -29,4 +25,6 @@ def numberGuesser():
             print('higher')
             userNumber = int(input("Guess Again: "))
 
-main()
+
+if __name__ == '__main__':
+    numberGuesser()

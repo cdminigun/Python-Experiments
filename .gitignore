@@ -58,3 +58,5 @@ target/
 #Other
 .DS_Store
 .python-version
+#Not Done:
+password_cracker.py
