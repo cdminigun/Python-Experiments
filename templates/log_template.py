@@ -1,6 +1,7 @@
 from optparse import OptionParser
 from time import gmtime, strftime
 
+
 def main():
     usage = "usage: %prog [options] arg"
     parser = OptionParser(usage)
@@ -13,10 +14,11 @@ def main():
                       local time: Default is GMT")
     (options, args) = parser.parse_args()
     if options.gmt:
-        filename = strftime("%b-%d-%Y-%H:%M:%S-", gmtime())+ str(options.temp_name)
+        f_name = strftime("%b-%d-%Y-%H:%M:%S-",
+                          gmtime()) + str(options.temp_name)
     else:
-        filename = strftime("%b-%d-%Y-%H:%M:%S-") + str(options.temp_name)
-    file = open(filename, 'w')
-    
+        f_name = strftime("%b-%d-%Y-%H:%M:%S-") + str(options.temp_name)
+    file = open(f_name, 'w')
+
 if __name__ == "__main__":
     main()

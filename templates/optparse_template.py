@@ -1,5 +1,6 @@
 from optparse import OptionParser
 
+
 def main():
     usage = "usage: %prog [options] arg"
     parser = OptionParser(usage)
