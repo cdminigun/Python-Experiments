@@ -1,7 +1,7 @@
 from optparse import OptionParser
 
 
-def main():
+def argument_handler():
     usage = "usage: %prog [options] arg"
     parser = OptionParser(usage)
     parser.add_option("-f", "--file", dest="filename",
@@ -17,4 +17,4 @@ def main():
         print "reading %s..." % options.filename
 
 if __name__ == "__main__":
-    main()
+    argument_handler()

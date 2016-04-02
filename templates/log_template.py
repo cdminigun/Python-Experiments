@@ -2,7 +2,7 @@ from optparse import OptionParser
 from time import gmtime, strftime
 
 
-def main():
+def log_template():
     usage = "usage: %prog [options] arg"
     parser = OptionParser(usage)
     parser.set_defaults(gmt=True, temp_name="log-template")
@@ -21,4 +21,4 @@ def main():
     file = open(f_name, 'w')
 
 if __name__ == "__main__":
-    main()
+    log_template()
