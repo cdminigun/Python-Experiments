@@ -1,6 +1,6 @@
 #A Simple program to show host name & IP.
-
 import socket
+
 
 def print_machine_info():
     host_name  = socket.gethostname()
