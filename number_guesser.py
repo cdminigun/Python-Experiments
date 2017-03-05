@@ -10,6 +10,8 @@ def main():
             main_test = 1
         else:
             number_guesser()
+
+
 def number_guesser():
     """a function to generate a random number and has the user guess"""
     promptUser = "Guess a whole number(Non negative)from 1 to 100:"
@@ -17,7 +19,7 @@ def number_guesser():
     randnumber = random.randint(1, 100)
     userNumber = int(input(promptUser))
     while test == 0 :
-        
+
         try:
             if randnumber == userNumber:
                 print("You're correct!")
