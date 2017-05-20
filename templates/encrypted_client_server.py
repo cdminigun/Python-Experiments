@@ -1,18 +1,27 @@
 import argparse
 import socket
 from Crypto.Cipher import AES
+from Crypto import Random
 
-PADDING_BYTE = " "
+BLOCK_SIZE = 16
+
+pad = lambda s: s + (BLOCK_SIZE - len(s) % BLOCK_SIZE) * \
+                chr(BLOCK_SIZE - len(s) % BLOCK_SIZE)
+unpad = lambda s: s[:-ord(s[len(s) - 1:])]
 
 def do_decrypt(ciphertext):
-    obj2 = AES.new('This is a key123', AES.MODE_CBC, 'This is an IV456')
-    message = obj2.decrypt(ciphertext)
-    return message
+    iv = ciphertext[:16]
+    obj2 = AES.new('This is a key123', AES.MODE_CBC, iv)
+    message = obj2.decrypt(ciphertext[16:])
+    return unpad(message)
 
 def do_encrypt(message):
-    obj = AES.new('This is a key123', AES.MODE_CBC, 'This is an IV456')
-    ciphertext = obj.encrypt(message+ ((16 - len(message)%16) * PADDING_BYTE))
-    return ciphertext
+    message = pad(message)
+    iv = Random.new().read(AES.block_size)
+    obj = AES.new('This is a key123', AES.MODE_CBC, iv)
+    ciphertext = obj.encrypt(message)
+    print "IV: " + iv+ciphertext
+    return iv+ciphertext
 
 
 def is_valid_ipv4_address(address):
@@ -33,6 +42,8 @@ def client_socket(remote_ip, port, echo_string):
     print "This is my client socket"
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((remote_ip, port))
+    print echo_string
+    print do_encrypt(echo_string)
     client_socket.send(do_encrypt(echo_string))
 
 def server_socket(port):
@@ -44,9 +55,9 @@ def server_socket(port):
     while 1:
         conn, addr = sock.accept()
         a = conn.recv(1024)
-        print a
+        print "Unencrypted Message: \n{0}".format(a)
         a = do_decrypt(a)
-        print a
+        print "Decrypted MEssage: \n{0}".format(a)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Client and Server template.")
