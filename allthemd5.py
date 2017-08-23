@@ -1,3 +1,21 @@
+"""
+usage: allthemd5.py [-h] [-f FOLDER] [-a] [-v] [-p] [-d DATA]
+                    [-n FULL_FILE_PATH]
+
+Tripwire in python.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f FOLDER, --folder FOLDER
+                        Absolute path to the folder.
+  -a, --all_files       Md5sum of all directories
+  -v, --verbose         Print debugging information.
+  -p, --pwn             Pwn tripwire and write data to a file. Note -d, -n and
+                        -f are needed with -p
+  -d DATA, --data DATA  Data to be written in pwn_tripwire
+  -n FULL_FILE_PATH, --full_file_path FULL_FILE_PATH
+                        Path of file to be written.
+"""
 import os
 import argparse
 import md5
@@ -5,6 +23,11 @@ import md5
 verbose = False
 
 def find_folders(folder):
+    """
+    Finds all subfolders and files and hashes them itteratively like tripwire.
+    Args:
+        folder (str) : The name or path of a folder to hash
+    """
     try:
         pass_through_flag = 0
         a = dict()
@@ -19,6 +42,13 @@ def find_folders(folder):
         print "An unknown error occured in find_folders"
 
 def hash_files(filename, full_path, pass_through_flag, a):
+    """
+    Continiously hashes files within any subdirectory of a specified folder.
+    Args:
+        filename (str) : The name of path of a file.
+        full_path (str) : The full folder path
+        pas_through_flag (bool) : Flag for whether or not to pass through
+    """
     try:
         m = md5.new()
         f = open(full_path, "r")
@@ -47,8 +77,13 @@ def hash_files(filename, full_path, pass_through_flag, a):
     except:
         print "An unknown error occured."
 
-def pwn_tripwire(folder, data, full_file_path):
-    try: 
+def pwn_tripwire(folder):
+    """
+    Attempts to write data to all files within a folder path.
+    Args:
+        folder (str) : A name or path of a folder
+    """
+    try:
         a = dict()
         for dirname, dirnames, filenames in os.walk(folder):
             for filename in filenames:
@@ -68,8 +103,6 @@ if __name__ == "__main__":
     parser.add_argument("-a", "--all_files", action="store_true", help="Md5sum of all directories")
     parser.add_argument("-v", "--verbose", action="store_true", help="Print debugging information." )
     parser.add_argument("-p", "--pwn", action="store_true", help="Pwn tripwire and write data to a file. Note -d, -n and -f are needed with -p")
-    parser.add_argument("-d", "--data", type=str, help="Data to be written in pwn_tripwire")
-    parser.add_argument("-n","--full_file_path", type=str, help="Path of file to be written.")
     args = parser.parse_args()
     if args.verbose:
         verbose = True
@@ -78,9 +111,9 @@ if __name__ == "__main__":
     elif args.folder:
         find_folders(args.folder)
     elif args.pwn:
-        if args.folder and args.data and args.full_file_path:
-            pwn_tripwire(args.folder, args.data, args.full_file_path)
+        if args.folder:
+            pwn_tripwire(args.folder)
         else:
             parser.print_help()
     else:
-       parser.print_help()
+        parser.print_help()
